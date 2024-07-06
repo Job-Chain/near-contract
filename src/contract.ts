@@ -24,7 +24,7 @@ class JobChainSBT {
         this.owner_id = owner_id;
     }
 
-    @call({})
+    @call({ payableFunction: true }) // Make the function payable
     sbt_mint({ token_id, token_owner_id, token_metadata }: { token_id: string, token_owner_id: string, token_metadata: any }) {
         assert(near.predecessorAccountId() === this.owner_id, "Only owner can mint");
         assert(!this.sbt_metadata_by_id.get(token_id), "Token already exists");
@@ -40,8 +40,7 @@ class JobChainSBT {
         tokens_set.push(token_id);
         this.sbts_per_owner.set(token_owner_id, tokens_set);
 
-        this.owner_by_sbt.set(token_id, token_owner_id); // Set the owner in the reverse lookup map
-
+        this.owner_by_sbt.set(token_id, token_owner_id);
         return token_id;
     }
 
@@ -53,7 +52,7 @@ class JobChainSBT {
             return null;
         }
 
-        let owner_id = this.owner_by_sbt.get(token_id); // Get the owner from the reverse lookup map
+        let owner_id = this.owner_by_sbt.get(token_id);
 
         return {
             token_id,

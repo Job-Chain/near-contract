@@ -798,7 +798,9 @@ function NearBindgen({
 }
 
 var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _class, _class2;
-let JobChainSBT = (_dec = NearBindgen({}), _dec2 = call({}), _dec3 = call({}), _dec4 = view(), _dec5 = view(), _dec6 = view(), _dec7 = view(), _dec8 = call({}), _dec9 = call({}), _dec(_class = (_class2 = class JobChainSBT {
+let JobChainSBT = (_dec = NearBindgen({}), _dec2 = call({}), _dec3 = call({
+  payableFunction: true
+}), _dec4 = view(), _dec5 = view(), _dec6 = view(), _dec7 = view(), _dec8 = call({}), _dec9 = call({}), _dec(_class = (_class2 = class JobChainSBT {
   constructor() {
     this.owner_id = currentAccountId();
     this.sbts_per_owner = new LookupMap('spo');
@@ -811,6 +813,7 @@ let JobChainSBT = (_dec = NearBindgen({}), _dec2 = call({}), _dec3 = call({}), _
     assert(!this.owner_id, "Already initialized");
     this.owner_id = owner_id;
   }
+  // Make the function payable
   sbt_mint({
     token_id,
     token_owner_id,
@@ -825,8 +828,7 @@ let JobChainSBT = (_dec = NearBindgen({}), _dec2 = call({}), _dec3 = call({}), _
     }
     tokens_set.push(token_id);
     this.sbts_per_owner.set(token_owner_id, tokens_set);
-    this.owner_by_sbt.set(token_id, token_owner_id); // Set the owner in the reverse lookup map
-
+    this.owner_by_sbt.set(token_id, token_owner_id);
     return token_id;
   }
   sbt_token({
@@ -836,8 +838,7 @@ let JobChainSBT = (_dec = NearBindgen({}), _dec2 = call({}), _dec3 = call({}), _
     if (!token_metadata) {
       return null;
     }
-    let owner_id = this.owner_by_sbt.get(token_id); // Get the owner from the reverse lookup map
-
+    let owner_id = this.owner_by_sbt.get(token_id);
     return {
       token_id,
       owner_id,
@@ -995,4 +996,4 @@ function init() {
 }
 
 export { JobChainSBT, init, nft_transfer, nft_transfer_call, sbt_mint, sbt_supply_for_owner, sbt_token, sbt_tokens_for_owner, sbt_total_supply };
-//# sourceMappingURL=hello_near.js.map
+//# sourceMappingURL=jobchain.js.map
