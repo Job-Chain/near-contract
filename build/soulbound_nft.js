@@ -2,10 +2,6 @@ import { NearBindgen, near, call, view, LookupMap, UnorderedMap, Vector } from '
 
 @NearBindgen({})
 class JobChainSBT {
-  owner_id: string;
-  sbts_per_owner: LookupMap<string, Vector<string>>;
-  sbt_metadata_by_id: UnorderedMap<string, any>;
-
   constructor() {
     this.owner_id = near.currentAccountId();
     this.sbts_per_owner = new LookupMap('spo');
@@ -13,15 +9,21 @@ class JobChainSBT {
   }
 
   @call({})
-  init({ owner_id }: { owner_id: string }) {
-    assert(!this.owner_id, "Already initialized");
+  init({ owner_id }) {
+    if (this.owner_id) {
+      throw new Error("Already initialized");
+    }
     this.owner_id = owner_id;
   }
 
   @call({})
-  sbt_mint({ token_id, token_owner_id, token_metadata }: { token_id: string, token_owner_id: string, token_metadata: any }) {
-    assert(near.predecessorAccountId() === this.owner_id, "Only owner can mint");
-    assert(!this.sbt_metadata_by_id.get(token_id), "Token already exists");
+  sbt_mint({ token_id, token_owner_id, token_metadata }) {
+    if (near.predecessorAccountId() !== this.owner_id) {
+      throw new Error("Only owner can mint");
+    }
+    if (this.sbt_metadata_by_id.get(token_id)) {
+      throw new Error("Token already exists");
+    }
 
     this.sbt_metadata_by_id.set(token_id, token_metadata);
 
@@ -36,14 +38,14 @@ class JobChainSBT {
   }
 
   @view({})
-  sbt_token({ token_id }: { token_id: string }) {
+  sbt_token({ token_id }) {
     let token_metadata = this.sbt_metadata_by_id.get(token_id);
     if (!token_metadata) {
       return null;
     }
 
     let owner_id = null;
-    for (let [account_id, tokens] of this.sbts_per_owner.entries()) {
+    for (let [account_id, tokens] of this.sbts_per_owner) {
       if (tokens.includes(token_id)) {
         owner_id = account_id;
         break;
@@ -58,16 +60,13 @@ class JobChainSBT {
   }
 
   @view({})
-  sbt_tokens_for_owner({ account_id, from_index, limit }: { account_id: string, from_index?: number, limit?: number }) {
+  sbt_tokens_for_owner({ account_id, from_index = 0, limit = 50 }) {
     let tokens_set = this.sbts_per_owner.get(account_id);
     if (!tokens_set) {
       return [];
     }
 
-    from_index = from_index || 0;
-    limit = limit || 50;
     let tokens = [];
-
     for (let i = from_index; i < Math.min(from_index + limit, tokens_set.length); i++) {
       let token_id = tokens_set[i];
       let metadata = this.sbt_metadata_by_id.get(token_id);
@@ -82,7 +81,7 @@ class JobChainSBT {
   }
 
   @view({})
-  sbt_supply_for_owner({ account_id }: { account_id: string }) {
+  sbt_supply_for_owner({ account_id }) {
     let tokens_set = this.sbts_per_owner.get(account_id);
     return tokens_set ? tokens_set.length : 0;
   }
@@ -103,3 +102,5 @@ class JobChainSBT {
     throw new Error("Soulbound tokens cannot be transferred");
   }
 }
+
+export default JobChainSBT;
