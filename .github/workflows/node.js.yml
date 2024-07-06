@@ -33,3 +33,4 @@ jobs:
         - run: pnpm install
         - run: npm run build --if-present
         - run: npm install -g near-cli
+        - run: near add-credentials example-acct.testnet --seedPhrase "antique attitude say evolve ring arrive hollow auto wide bronze usual unfold"
