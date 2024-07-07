@@ -1,0 +1,13 @@
+{
+  "token_id": "1720347012",
+  "token_owner_id": "jobchain.testnet",
+  "token_metadata": {
+    "title": "Software Engineer",
+    "description": "Credential for John Doe",
+    "companyName": "Tech Corp",
+    "jobTitle": "Software Engineer",
+    "employmentPeriod": "Jan 2020 - Dec 2022",
+    "employeeId": "12345",
+    "media": "https://bafybeihdwdcefgh4dqkjv67uzcmw7o7s7ogphmacafw4i2ajbd3f5jeqe.ipfs.dweb.link/image.png"
+  }
+}

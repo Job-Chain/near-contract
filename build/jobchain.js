@@ -797,21 +797,14 @@ function NearBindgen({
   };
 }
 
-var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _class, _class2;
-let JobChainSBT = (_dec = NearBindgen({}), _dec2 = call({}), _dec3 = call({
+var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _class, _class2;
+let JobChainSBT = (_dec = NearBindgen({}), _dec2 = call({
   payableFunction: true
-}), _dec4 = view(), _dec5 = view(), _dec6 = view(), _dec7 = view(), _dec8 = call({}), _dec9 = call({}), _dec(_class = (_class2 = class JobChainSBT {
+}), _dec3 = view(), _dec4 = view(), _dec5 = view(), _dec6 = view(), _dec7 = call({}), _dec8 = call({}), _dec(_class = (_class2 = class JobChainSBT {
   constructor() {
-    this.owner_id = currentAccountId();
     this.sbts_per_owner = new LookupMap('spo');
     this.sbt_metadata_by_id = new UnorderedMap('sbt');
     this.owner_by_sbt = new LookupMap('obs');
-  }
-  init({
-    owner_id
-  }) {
-    assert(!this.owner_id, "Already initialized");
-    this.owner_id = owner_id;
   }
   // Make the function payable
   sbt_mint({
@@ -819,7 +812,6 @@ let JobChainSBT = (_dec = NearBindgen({}), _dec2 = call({}), _dec3 = call({
     token_owner_id,
     token_metadata
   }) {
-    assert(predecessorAccountId() === this.owner_id, "Only owner can mint");
     assert(!this.sbt_metadata_by_id.get(token_id), "Token already exists");
     this.sbt_metadata_by_id.set(token_id, token_metadata);
     let tokens_set = this.sbts_per_owner.get(token_owner_id);
@@ -885,7 +877,7 @@ let JobChainSBT = (_dec = NearBindgen({}), _dec2 = call({}), _dec3 = call({
   nft_transfer_call() {
     throw new Error("Soulbound tokens cannot be transferred");
   }
-}, (_applyDecoratedDescriptor(_class2.prototype, "init", [_dec2], Object.getOwnPropertyDescriptor(_class2.prototype, "init"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "sbt_mint", [_dec3], Object.getOwnPropertyDescriptor(_class2.prototype, "sbt_mint"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "sbt_token", [_dec4], Object.getOwnPropertyDescriptor(_class2.prototype, "sbt_token"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "sbt_tokens_for_owner", [_dec5], Object.getOwnPropertyDescriptor(_class2.prototype, "sbt_tokens_for_owner"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "sbt_supply_for_owner", [_dec6], Object.getOwnPropertyDescriptor(_class2.prototype, "sbt_supply_for_owner"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "sbt_total_supply", [_dec7], Object.getOwnPropertyDescriptor(_class2.prototype, "sbt_total_supply"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "nft_transfer", [_dec8], Object.getOwnPropertyDescriptor(_class2.prototype, "nft_transfer"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "nft_transfer_call", [_dec9], Object.getOwnPropertyDescriptor(_class2.prototype, "nft_transfer_call"), _class2.prototype)), _class2)) || _class);
+}, (_applyDecoratedDescriptor(_class2.prototype, "sbt_mint", [_dec2], Object.getOwnPropertyDescriptor(_class2.prototype, "sbt_mint"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "sbt_token", [_dec3], Object.getOwnPropertyDescriptor(_class2.prototype, "sbt_token"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "sbt_tokens_for_owner", [_dec4], Object.getOwnPropertyDescriptor(_class2.prototype, "sbt_tokens_for_owner"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "sbt_supply_for_owner", [_dec5], Object.getOwnPropertyDescriptor(_class2.prototype, "sbt_supply_for_owner"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "sbt_total_supply", [_dec6], Object.getOwnPropertyDescriptor(_class2.prototype, "sbt_total_supply"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "nft_transfer", [_dec7], Object.getOwnPropertyDescriptor(_class2.prototype, "nft_transfer"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "nft_transfer_call", [_dec8], Object.getOwnPropertyDescriptor(_class2.prototype, "nft_transfer_call"), _class2.prototype)), _class2)) || _class);
 function nft_transfer_call() {
   const _state = JobChainSBT._getState();
   if (!_state && JobChainSBT._requireInit()) {
@@ -980,20 +972,6 @@ function sbt_mint() {
   JobChainSBT._saveToStorage(_contract);
   if (_result !== undefined) if (_result && _result.constructor && _result.constructor.name === "NearPromise") _result.onReturn();else env.value_return(JobChainSBT._serialize(_result, true));
 }
-function init() {
-  const _state = JobChainSBT._getState();
-  if (!_state && JobChainSBT._requireInit()) {
-    throw new Error("Contract must be initialized");
-  }
-  const _contract = JobChainSBT._create();
-  if (_state) {
-    JobChainSBT._reconstruct(_contract, _state);
-  }
-  const _args = JobChainSBT._getArgs();
-  const _result = _contract.init(_args);
-  JobChainSBT._saveToStorage(_contract);
-  if (_result !== undefined) if (_result && _result.constructor && _result.constructor.name === "NearPromise") _result.onReturn();else env.value_return(JobChainSBT._serialize(_result, true));
-}
 
-export { JobChainSBT, init, nft_transfer, nft_transfer_call, sbt_mint, sbt_supply_for_owner, sbt_token, sbt_tokens_for_owner, sbt_total_supply };
+export { JobChainSBT, nft_transfer, nft_transfer_call, sbt_mint, sbt_supply_for_owner, sbt_token, sbt_tokens_for_owner, sbt_total_supply };
 //# sourceMappingURL=jobchain.js.map

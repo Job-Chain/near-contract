@@ -1,5 +1,4 @@
 DEFINE_NEAR_METHOD(JobChainSBT)
-DEFINE_NEAR_METHOD(init)
 DEFINE_NEAR_METHOD(nft_transfer)
 DEFINE_NEAR_METHOD(nft_transfer_call)
 DEFINE_NEAR_METHOD(sbt_mint)
